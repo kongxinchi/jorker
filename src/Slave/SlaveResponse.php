@@ -35,29 +35,25 @@ class SlaveResponse
 
     /**
      * 执行成功回传
-     * @param SlaveInfo $slaveInfo
      * @return SlaveResponse
      */
-    public static function complete($slaveInfo)
+    public static function complete()
     {
         $ins = new SlaveResponse();
         $ins->ok = true;
-        $ins->slaveInfo = $slaveInfo;
         return $ins;
     }
 
     /**
      * 执行失败回传
      * @param \Exception|array $error
-     * @param SlaveInfo $slaveInfo
      * @return SlaveResponse
      */
-    public static function fail($error, $slaveInfo)
+    public static function fail($error)
     {
         $ins = new SlaveResponse();
         $ins->ok = false;
         $ins->error = ($error instanceof \Exception) ? new SlaveException($error) : new SlaveError($error);
-        $ins->slaveInfo = $slaveInfo;
         return $ins;
     }
 
@@ -71,7 +67,6 @@ class SlaveResponse
         return json_encode(
             ['ok' => $this->ok]
             + ($this->error ? ['error' => (string)$this->error] : [])
-            + $this->slaveInfo->toJSON()
         );
     }
 }

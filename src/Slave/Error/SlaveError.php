@@ -8,9 +8,37 @@ class SlaveError implements SlaveErrorInterface
      */
     protected $error;
 
+    /**
+     * @var string
+     */
+    protected $traceAsString;
+
     public function __construct($error)
     {
         $this->error = $error;
+        $this->traceAsString = $this->buildTraceAsString();
+    }
+
+    protected function buildTraceAsString()
+    {
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10);
+        $length = count($trace);
+        $str = "";
+        for ($i = 0; $i < $length; $i++) {
+            $file = isset($trace[$i]['file']) ? $trace[$i]['file'] : "";
+            $line = isset($trace[$i]['line']) ? $trace[$i]['line'] : "";
+            $class = isset($trace[$i]['class']) ? $trace[$i]['class'] : "";
+            $type = isset($trace[$i]['type']) ? $trace[$i]['type'] : "";
+            $function = isset($trace[$i]['function']) ? $trace[$i]['function'] : "";
+            $args = isset($trace[$i]['args']) ? $trace[$i]['args'] : [];
+
+            $str .= "#{$i}"
+                . ($file ? " {$file} ({$line})" : "")
+                ." {$class}{$type}{$function}"
+                ."(". implode(', ', array_map('strval', $args)) .")"
+                . PHP_EOL;
+        }
+        return $str;
     }
 
     public function getType()
@@ -35,7 +63,7 @@ class SlaveError implements SlaveErrorInterface
 
     public function getTraceAsString()
     {
-        return ""; // TODO
+        return $this->traceAsString;
     }
 
     public function __toString()

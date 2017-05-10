@@ -1,6 +1,7 @@
 <?php
 namespace Jorker\Slave;
 
+use Jorker\SocketCommunicate;
 use Psr\Log\LoggerInterface;
 
 class Slave
@@ -9,6 +10,11 @@ class Slave
      * @var callable
      */
     protected $handler;
+
+    /**
+     * @var int
+     */
+    protected $pid;
 
     /**
      * @var resource
@@ -51,24 +57,8 @@ class Slave
         $this->logger = $logger;
         $this->maxMemory = $maxMemory;
         $this->startTime = time();
+        $this->pid = getmypid();
         register_shutdown_function([$this, 'shutdown']);
-    }
-
-    protected function send($message)
-    {
-        fwrite($this->socket, serialize($message) . PHP_EOL);
-    }
-
-    /**
-     * @return SlaveRequest|false
-     */
-    protected function receive()
-    {
-        $line = fgets($this->socket);
-        if ($line) {
-            return unserialize(trim($line));
-        }
-        return false;
     }
 
     /**
@@ -98,18 +88,21 @@ class Slave
     public function loop()
     {
         while (!$this->exit) {
-            if (!$recv = $this->receive()) {
+            /* @var \Jorker\Slave\SlaveRequest $request */
+            if (!$request = SocketCommunicate::receive($this->socket)) {
                 usleep(10000);  // 10毫秒
                 continue;
             }
 
-            if ($recv->type == SlaveRequest::TYPE_RUN) {
+            if ($request->type == SlaveRequest::TYPE_RUN) {
                 try {
                     $this->count ++;
-                    call_user_func($this->handler, $recv->body, $this);
-                    $resp = SlaveResponse::complete($this->buildSlaveInfo());
+                    call_user_func($this->handler, $request->body, $this);
+                    $resp = SlaveResponse::complete();
+                    $this->logger()->debug("{{$this->pid} -> Complete} {$this->buildSlaveInfo()}");
                 } catch (\Exception $e) {
-                    $resp = SlaveResponse::fail($e, $this->buildSlaveInfo());
+                    $resp = SlaveResponse::fail($e);
+                    $this->logger()->error("{{$this->pid} -> Fail} {$this->buildSlaveInfo()}");
                 }
 
                 if ($this->exit = $this->overMaxMemory()) {
@@ -118,9 +111,9 @@ class Slave
                     $resp->setExiting(true);
                 }
 
-                $this->send($resp);
+                SocketCommunicate::send($this->socket, $resp);
 
-            } elseif ($recv->type == SlaveRequest::TYPE_STOP) {
+            } elseif ($request->type == SlaveRequest::TYPE_STOP) {
                 $this->exit = true;
             }
         }
@@ -134,9 +127,9 @@ class Slave
         }
 
         $error = error_get_last();
-        $resp = SlaveResponse::fail($error, $this->buildSlaveInfo());
+        $resp = SlaveResponse::fail($error);
         $resp->setExiting(true);
-        $this->send($resp);
+        SocketCommunicate::send($this->socket, $resp);
         fclose($this->socket);
     }
 }

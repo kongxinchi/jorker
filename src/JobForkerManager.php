@@ -232,7 +232,7 @@ class JobForkerManager
             $this->pool[$pid]->closeSocket();
 
             // 打印进程退出日志
-            $this->logger->info("{Exit <- {$pid}} " . $this->pool[$pid]->getSlaveInfo());
+            $this->logger->info("{Exit <- {$pid}} ");
 
             unset($this->pool[$pid]);
         }

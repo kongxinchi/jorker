@@ -26,7 +26,7 @@ class SlaveException implements SlaveErrorInterface
         $this->message = $exception->getMessage();
         $this->file = $exception->getFile();
         $this->line = $exception->getLine();
-//        $this->traceAsString = $exception->getTraceAsString();
+        $this->traceAsString = $exception->getTraceAsString();
     }
 
     public function getClassName()

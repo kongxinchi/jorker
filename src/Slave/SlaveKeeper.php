@@ -2,6 +2,7 @@
 namespace Jorker\Slave;
 
 use Jorker\MasterStatistics;
+use Jorker\SocketCommunicate;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
@@ -42,14 +43,15 @@ class SlaveKeeper
     protected $logger;
 
     /**
-     * @var SlaveInfo
-     */
-    protected $slaveInfo;
-
-    /**
      * @var MasterStatistics
      */
     protected $statistics;
+
+    /**
+     * 当前正在进行的任务
+     * @var mixed
+     */
+    protected $job;
 
     public function __construct($pid, $socket, $logger, $statistics)
     {
@@ -60,37 +62,25 @@ class SlaveKeeper
         $this->statistics = $statistics;
     }
 
-    /**
-     * @param SlaveRequest $request
-     */
-    public function send($request)
-    {
-        // TODO 序列化函数会保留\n，需要想办法处理
-        $logLevel = $request->type == SlaveRequest::TYPE_STOP ? LogLevel::INFO : LogLevel::DEBUG;
-        $this->logger->log($logLevel, "{Request -> {$this->pid}} {$request}");
-        fwrite($this->socket, serialize($request) . PHP_EOL);
-    }
-
     public function stop()
     {
-        $this->send(SlaveRequest::stop());
+        $request = SlaveRequest::stop();
+        $this->logger->info("{Request -> {$this->pid}} {$request}");
+        SocketCommunicate::send($this->socket, $request);
     }
 
-    public function run($data)
+    public function run($job)
     {
-        $this->send(SlaveRequest::run($data));
+        $request = SlaveRequest::run($job);
+        $this->setJob($job);
+        $this->logger->debug("{Request -> {$this->pid}} {$request}");
+        SocketCommunicate::send($this->socket, $request);
     }
 
-    /**
-     * @return SlaveResponse|false
-     */
-    public function receive()
+    public function setJob($job)
     {
-        $line = fgets($this->socket);
-        if ($line) {
-            return unserialize(trim($line));
-        }
-        return false;
+        $this->job = $job;
+        return $this;
     }
 
     public function setStatus($status)
@@ -113,26 +103,24 @@ class SlaveKeeper
             return true;
         }
 
-        $resp = $this->receive();
+         /* @var SlaveResponse $resp */
+        $resp = SocketCommunicate::receive($this->socket);
         if ($resp) {
-            $logLevel = $resp->ok ? LogLevel::DEBUG : LogLevel::ERROR;
-            $this->logger->log($logLevel, "{Response <- {$this->pid}} {$resp}");
 
-            if (!$resp->ok && $this->failedCallback) {
-                call_user_func($this->failedCallback, $resp);
+            if ($resp->ok) {
+                $this->logger->debug("{Response <- {$this->pid}} {$resp}");
+            } else {
+                $this->logger->error("{Response <- {$this->pid}} {$resp}");
+                if (is_callable($this->failedCallback)) {
+                    call_user_func($this->failedCallback, $this->job, $resp->error);
+                }
             }
 
-            $this->setFailedCallback(null)->setStatus($resp->exiting ? self::ST_EXITING : self::ST_IDLE);
-            $this->slaveInfo = $resp->slaveInfo;
+            $this->setJob(null)->setFailedCallback(null)->setStatus($resp->exiting ? self::ST_EXITING : self::ST_IDLE);
             $this->statistics->update($resp);
             return $this->handleIfResponse();
         }
         return false;
-    }
-
-    public function getSlaveInfo()
-    {
-        return $this->slaveInfo;
     }
 
     public function closeSocket()
