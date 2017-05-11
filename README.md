@@ -28,6 +28,7 @@ Run jobs with multi process. | 脚本多进程执行
       
 ## Options
     \Jorker\JobForkerManager::__construct($limit, $options)
+    
       @param int $limit | Sub process limit. 使用多少个子进程
       @param array $options | configs. 配置项
         [
