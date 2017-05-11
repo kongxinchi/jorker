@@ -3,7 +3,7 @@ require_once(dirname(__DIR__) . '/vendor/autoload.php');
 
 $manager = new \Jorker\JobForkerManager(3);
 $manager->allot(function() {
-    for($i = 1; $i < 100; $i++) {
+    for($i = 0; $i < 100; $i++) {
         yield ['i' => $i];
     }
 })->run(function($job, \Jorker\Slave\Slave $slave) {

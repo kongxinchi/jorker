@@ -74,10 +74,10 @@ class JobForkerManager
      * [
      *     "logger" => new SimpleEchoLogger(),     // 日志接口
      *     "logLevel" => LogLevel::INFO,           // 打印日志的最低等级
-     *     "slaveMaxMemory" => 256*1024*1024       // 子进程最大内存，超出该内存终止子进程，终止后父进程会重新fork一个新的子进程
-     *     "reportInterval" => 600                 // 运行指定秒数后，对运行时统计进行报告
-     *     "reportHandler" => null                 // 回调函数，运行时统计报告
-     *     "stampFilePath" => "/tmp/stamp.dat"     // 用于记录上一次中断时即将执行的数据
+     *     "slaveMaxMemory" => 256*1024*1024,      // 子进程最大内存，超出该内存终止子进程，终止后父进程会重新fork一个新的子进程
+     *     "reportInterval" => 600,                // 运行指定秒数后，对运行时统计进行报告
+     *     "reportHandler" => null,                // 回调函数，运行时统计报告
+     *     "stampFilePath" => "/tmp/stamp.dat",    // 用于记录上一次中断时即将执行的数据
      * ]
      */
     public function __construct($limit = 1, $options = [])
