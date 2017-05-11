@@ -17,13 +17,17 @@ Run jobs with multi process. | 脚本多进程执行
 
       $manager = new \Jorker\JobForkerManager(3);
       $manager->allot(function() {
+      
           // RETURN OR YIELD JOBS IN MASTER PROCESS...
           for($i = 0; $i < 100; $i++) {
               yield ['i' => $i];
           }
+          
       })->run(function($job, \Jorker\Slave\Slave $slave) {
+      
           // DO SOMETHING IN SUB PROCESS...
           $slave->logger()->info("use this way if you want print log {$job['i']}.");
+          
       });
       
 ## Options
@@ -37,5 +41,5 @@ Run jobs with multi process. | 脚本多进程执行
           "slaveMaxMemory" => 256*1024*1024,      // Sub process max memory, if over this value, master will stop this sub process and fork a new one. 子进程最大内存，超出该内存终止子进程，终止后父进程会重新fork一个新的子进程
           "reportInterval" => 600,                // Execute report handler every {reportInterval} seconds. 运行指定秒数后，对运行时统计进行报告
           "reportHandler" => functuin() {echo "REPORT";},  // Execute report handle. 回调函数，运行时统计报告
-          "stampFilePath" => "/tmp/stamp.dat",    // File path that save last job when user CTRL+C stopped script. 用于记录上一次中断时，即将执行数据的保存路径
-        ]
+          "stampFilePath" => "/tmp/stamp.dat",    // File path that save last job when user CTRL+C stopped script. 用于记录上一次中断时，即将执行数据的保存路径
+        ]
