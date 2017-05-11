@@ -68,7 +68,7 @@ class JobForkerManager
 
     /**
      * JobForkerManager constructor.
-     * @param int $limit
+     * @param int $limit 进程数量
      * @param array $options
      * options e.g.
      * [
