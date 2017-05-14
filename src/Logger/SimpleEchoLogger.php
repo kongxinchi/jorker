@@ -4,9 +4,9 @@ namespace Jorker\Logger;
 use Psr\Log\AbstractLogger;
 
 /**
- * 将日志输出到屏幕
+ * 默认的日志接口实现，将日志简单的输出到屏幕
  * Class SimpleEchoLogger
- * @package Gaia\Helpers\JobForker
+ * @package Jorker\Logger
  */
 class SimpleEchoLogger extends AbstractLogger
 {

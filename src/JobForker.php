@@ -9,10 +9,10 @@ use Psr\Log\LogLevel;
 
 /**
  * 多进程任务执行
- * Class JobForkerManager
- * @package Gaia\Helpers\JobForker
+ * Class class JobForker
+ * @package Jorker
  */
-class JobForkerManager
+class JobForker
 {
     /**
      * 日志接口

@@ -4,6 +4,11 @@ namespace Jorker\Logger;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
+/**
+ * 日志接口包装，使调用者可以限制输出的日志等级
+ * Class LoggerWrapper
+ * @package Jorker\Logger
+ */
 class LoggerWrapper implements LoggerInterface
 {
 

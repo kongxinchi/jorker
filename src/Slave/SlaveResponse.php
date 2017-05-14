@@ -5,6 +5,11 @@ use Jorker\Slave\Error\SlaveError;
 use Jorker\Slave\Error\SlaveErrorInterface;
 use Jorker\Slave\Error\SlaveException;
 
+/**
+ * 子进程响应回传
+ * Class SlaveResponse
+ * @package Jorker\Slave
+ */
 class SlaveResponse
 {
     /**

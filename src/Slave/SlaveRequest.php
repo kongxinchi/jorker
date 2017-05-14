@@ -1,6 +1,11 @@
 <?php
 namespace Jorker\Slave;
 
+/**
+ * 父进程任务分发请求
+ * Class SlaveRequest
+ * @package Jorker\Slave
+ */
 class SlaveRequest
 {
     const TYPE_RUN = 'run';

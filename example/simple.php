@@ -1,8 +1,8 @@
 <?php
 require_once(dirname(__DIR__) . '/vendor/autoload.php');
 
-$manager = new \Jorker\JobForkerManager(3);
-$manager->allot(function() {
+$forker = new \Jorker\JobForker(3);
+$forker->allot(function() {
     $jobs = [];
     for($i = 0; $i < 100; $i++) {
         $jobs[] = ['i' => $i];

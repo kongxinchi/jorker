@@ -11,11 +11,11 @@ class CustomLogger extends \Psr\Log\AbstractLogger
     }
 }
 
-$manager = new \Jorker\JobForkerManager(3, [
+$forker = new \Jorker\JobForker(3, [
     "logger" => new CustomLogger(),
     'logLevel' => \Psr\Log\LogLevel::DEBUG
 ]);
-$manager->allot(function() {
+$forker->allot(function() {
     for($i = 0; $i < 100; $i++) {
         yield ['i' => $i];
     }

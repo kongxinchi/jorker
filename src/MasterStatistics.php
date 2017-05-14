@@ -3,6 +3,11 @@ namespace Jorker;
 
 use Jorker\Slave\SlaveResponse;
 
+/**
+ * 父进程中统计脚本执行情况
+ * Class MasterStatistics
+ * @package Jorker
+ */
 class MasterStatistics
 {
     /**

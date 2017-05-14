@@ -6,8 +6,8 @@ require_once(dirname(__DIR__) . '/vendor/autoload.php');
  * next time you run this script, the arg $start will be the first not execute job
  */
 
-$manager = new \Jorker\JobForkerManager(1);
-$manager->allot(function($start) {
+$forker = new \Jorker\JobForker(1);
+$forker->allot(function($start) {
     $i = is_null($start) ? 0 : $start['i'];
     for(; $i < 100; $i++) {
         usleep(100000);

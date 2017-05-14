@@ -1,7 +1,7 @@
 <?php
 require_once(dirname(__DIR__) . '/vendor/autoload.php');
 
-$manager = new \Jorker\JobForkerManager(3, [
+$forker = new \Jorker\JobForker(3, [
     "reportInterval" => 1,                                 // 运行指定秒数后，对运行时统计进行报告
     "reportHandler" => function(\Jorker\MasterStatistics $statistics) {
         $fp = fopen('report.txt', 'a');
@@ -9,7 +9,7 @@ $manager = new \Jorker\JobForkerManager(3, [
         fclose($fp);
     }
 ]);
-$manager->allot(function() {
+$forker->allot(function() {
     $result = [];
     for($i = 0; $i < 100; $i++) {
         $result[] = ['i' => $i];

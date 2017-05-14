@@ -9,7 +9,7 @@ use Psr\Log\LogLevel;
 /**
  * 主进程对子进程状态的维护，对象在主进程中
  * Class SlaveKeeper
- * @package Gaia\Helpers\JobForker
+ * @package Jorker\Slave
  */
 class SlaveKeeper
 {

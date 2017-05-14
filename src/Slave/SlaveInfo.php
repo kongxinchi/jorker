@@ -1,7 +1,11 @@
 <?php
 namespace Jorker\Slave;
 
-
+/**
+ * 子进程运行状态
+ * Class SlaveInfo
+ * @package Jorker\Slave
+ */
 class SlaveInfo
 {
     /**

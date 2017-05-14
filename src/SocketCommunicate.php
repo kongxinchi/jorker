@@ -1,7 +1,11 @@
 <?php
-
 namespace Jorker;
 
+/**
+ * 主进程与进程通信
+ * Class SocketCommunicate
+ * @package Jorker
+ */
 class SocketCommunicate
 {
     public static function send($handler, $data)

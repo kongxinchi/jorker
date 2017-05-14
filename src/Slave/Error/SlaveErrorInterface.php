@@ -1,7 +1,11 @@
 <?php
 namespace Jorker\Slave\Error;
 
-
+/**
+ * 子进程错误封装接口
+ * Interface SlaveErrorInterface
+ * @package Jorker\Slave\Error
+ */
 interface SlaveErrorInterface
 {
     /**

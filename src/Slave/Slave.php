@@ -4,6 +4,11 @@ namespace Jorker\Slave;
 use Jorker\SocketCommunicate;
 use Psr\Log\LoggerInterface;
 
+/**
+ * 子进程类，任务轮训
+ * Class Slave
+ * @package Jorker\Slave
+ */
 class Slave
 {
     /**

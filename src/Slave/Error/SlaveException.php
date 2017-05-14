@@ -1,6 +1,11 @@
 <?php
 namespace Jorker\Slave\Error;
 
+/**
+ * 子进程响应回传时，对于执行异常的封装
+ * Class SlaveException
+ * @package Jorker\Slave\Error
+ */
 class SlaveException implements SlaveErrorInterface
 {
     protected $className;
