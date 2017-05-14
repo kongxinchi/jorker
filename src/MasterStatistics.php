@@ -57,7 +57,7 @@ class MasterStatistics
 
     /**
      * 根据需要执行的数据量设置总共的个数
-     * @param array|\Iterator $datas
+     * @param array|\Traversable $datas
      */
     public function setTotalCountByDatas($datas)
     {

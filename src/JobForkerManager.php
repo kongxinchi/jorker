@@ -46,7 +46,7 @@ class JobForkerManager
 
     /**
      * 需要执行的数据
-     * @var array|\Iterator
+     * @var array|\Traversable
      */
     protected $jobs = [];
 
