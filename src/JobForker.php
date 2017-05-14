@@ -67,7 +67,7 @@ class JobForker
     protected $statistics;
 
     /**
-     * JobForkerManager constructor.
+     * JobForker constructor.
      * @param int $limit 进程数量
      * @param array $options
      * options e.g.

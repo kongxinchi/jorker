@@ -15,7 +15,7 @@ Run jobs with multi process. | 脚本多进程执行
     <?php
       require_once(dirname(__DIR__) . '/vendor/autoload.php');
 
-      $manager = new \Jorker\JobForkerManager(3);
+      $manager = new \Jorker\JobForker(3);
       $manager->allot(function() {
       
           // RETURN OR YIELD JOBS IN MASTER PROCESS...
@@ -31,7 +31,7 @@ Run jobs with multi process. | 脚本多进程执行
       });
       
 ## Options
-    \Jorker\JobForkerManager::__construct($limit, $options)
+    \Jorker\JobForker::__construct($limit, $options)
     
       @param int $limit | Sub process limit. 使用多少个子进程
       @param array $options | configs. 配置项
