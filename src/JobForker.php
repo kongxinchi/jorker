@@ -175,7 +175,7 @@ class JobForker
 
                 // 子进程会走到这里，直接退出
                 if ($this->isForked) {
-                    return;
+                    exit();
                 }
 
                 $keeper->setFailedCallback($failedCallback)
