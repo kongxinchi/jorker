@@ -8,6 +8,9 @@ Run jobs with multi process. | 脚本多进程执行
 * Timing report progress. 定时报告进度
 * Highly configurable. 高度可配置
 
+## Fixme
+* 已知问题：主进程中有数据库连接时，在子进程退出时会将连接析构，导致主进程中连接失效。
+
 ## Setup
     composer require jorker/jorker
 
